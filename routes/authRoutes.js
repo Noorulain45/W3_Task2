@@ -1,11 +1,9 @@
-// routes/authRoutes.js
 const express = require("express");
 const { body } = require("express-validator");
 const { register, login } = require("../controllers/authController");
 const validate = require("../middleware/validateRequest");
 
 const router = express.Router();
-
 
 /**
  * @swagger
@@ -29,17 +27,25 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *                 example: John Doe
  *               email:
  *                 type: string
+ *                 format: email
+ *                 example: john@example.com
  *               password:
  *                 type: string
+ *                 minLength: 6
+ *                 example: password123
+ *             required:
+ *               - name
+ *               - email
+ *               - password
  *     responses:
  *       201:
  *         description: User created successfully.
  *       400:
  *         description: Validation error.
  */
-
 
 router.post(
   "/register",
@@ -51,8 +57,6 @@ router.post(
   validate,
   register
 );
-
-
 
 /**
  * @swagger
@@ -69,8 +73,14 @@ router.post(
  *             properties:
  *               email:
  *                 type: string
+ *                 format: email
+ *                 example: john@example.com
  *               password:
  *                 type: string
+ *                 example: password123
+ *             required:
+ *               - email
+ *               - password
  *     responses:
  *       200:
  *         description: Logged in successfully.

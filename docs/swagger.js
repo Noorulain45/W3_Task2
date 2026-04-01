@@ -24,7 +24,7 @@ const options = {
     ],
     servers: [
   {
-    url: "http://localhost:5000",
+    url: "https://backend-gamma-one-45.vercel.app/",
     description: "Production server",
   },
 ],

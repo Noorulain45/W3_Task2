@@ -1,4 +1,3 @@
-// routes/taskRoutes.js
 const express = require("express");
 const { body } = require("express-validator");
 const validate = require("../middleware/validateRequest");
@@ -12,53 +11,12 @@ const {
 
 const router = express.Router();
 
-
 /**
  * @swagger
  * tags:
  *   name: Tasks
  *   description: Task CRUD operations
  */
-
-/**
- * @swagger
- * /api/tasks:
- *   get:
- *     summary: Get all tasks for logged-in user
- *     tags: [Tasks]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of tasks.
- */
-
-
-
-router.get("/", auth, getTasks);
-
-
-/**
- * @swagger
- * /api/tasks/{id}:
- *   get:
- *     summary: Get a task by ID
- *     tags: [Tasks]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *     responses:
- *       200:
- *         description: Task details.
- *       404:
- *         description: Task not found.
- */
-router.get("/:id", auth, getTasks);
-
-
 
 /**
  * @swagger
@@ -77,8 +35,12 @@ router.get("/:id", auth, getTasks);
  *             properties:
  *               title:
  *                 type: string
+ *                 example: Buy groceries
  *               description:
  *                 type: string
+ *                 example: Milk, Eggs, Bread
+ *             required:
+ *               - title
  *     responses:
  *       201:
  *         description: Task created.
@@ -92,50 +54,17 @@ router.post(
   createTask
 );
 
+// Get tasks
+router.get("/", auth, getTasks);
+
+// Get task by ID
+router.get("/:id", auth, getTasks);
+
+// Update task
 router.put("/:id", auth, updateTask);
-
-
-
-/**
- * @swagger
- * /api/tasks/{id}:
- *   put:
- *     summary: Update a task
- *     tags: [Tasks]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *     requestBody:
- *       required: true
- *     responses:
- *       200:
- *         description: Task updated.
- */
-
 router.patch("/:id", auth, updateTask);
 
-
-
-/**
- * @swagger
- * /api/tasks/{id}:
- *   delete:
- *     summary: Delete a task
- *     tags: [Tasks]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *     responses:
- *       200:
- *         description: Task deleted.
- */
-
+// Delete task
 router.delete("/:id", auth, deleteTask);
 
 module.exports = router;
