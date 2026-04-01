@@ -11,16 +11,22 @@ const app = express();
 
 // Allow multiple origins for frontend + Swagger UI
 const allowedOrigins = [
-  "http://localhost:5000",                   // Swagger testing
-  "http://127.0.0.1:5000",                   // optional
+  "http://localhost:5000",
+  "http://127.0.0.1:5000",
+  "http://localhost:3000",
+  // Add your Vercel deployment URLs below:
+  /^https:\/\/.*\.vercel\.app$/,  // allows all *.vercel.app subdomains
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests (like Postman)
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'CORS policy does not allow access from this origin.';
-      return callback(new Error(msg), false);
+    // allow non-browser requests (Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    const allowed = allowedOrigins.some((o) =>
+      o instanceof RegExp ? o.test(origin) : o === origin
+    );
+    if (!allowed) {
+      return callback(new Error("CORS policy does not allow access from this origin."), false);
     }
     return callback(null, true);
   },
@@ -56,7 +62,12 @@ app.get("/", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Only start the server when running locally (not on Vercel)
+if (process.env.VERCEL !== "1") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
