@@ -63,7 +63,7 @@ app.get("/", (req, res) => {
 });
 
 // Only start the server when running locally (not on Vercel)
-if (process.env.VERCEL !== "1") {
+if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
